@@ -17,11 +17,13 @@ def run():
     """
     inputs = {
         'topic': '''
-            This psycho who stabbed 3 people to death in NYC was let out of jail just a few weeks ago and has a long criminal history.
+            Trudeau has been Prime Minister for 9 years. 
 
-            Meanwhile Daniel Penny is on trial for protecting passengers from a lunatic on a subway.
+            In that time, former Immigration Minister Sean Fraser lost track of one million people who entered Canada and ran the immigration system "out of control," according to current Liberal Immigration Minister Marc Miller.
 
-            The justice system is completely broken.
+            All while both of them ignored warnings his immigration levels would drive up housing costs... and the Liberals also granted citizenship to an alleged ISIS terrorist.
+
+            These Liberals can't fix what they broke.
         '''
     }
     Firstproject().crew().kickoff(inputs=inputs)

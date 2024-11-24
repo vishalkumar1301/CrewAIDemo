@@ -18,47 +18,41 @@ class Firstproject():
 	def text_analyzer(self) -> Agent:
 		return Agent(
 			config=self.agents_config['text_analyzer'],
-				llm=LLM(model="ollama/llama3.2:3b", base_url='http://localhost:11434'),
-			verbose=True
+			llm=LLM(model="ollama/llama3.1:8b", base_url='http://localhost:11434')
 		)
 
 	@agent
 	def credibility_verifier(self) -> Agent:
 		return Agent(
 			config=self.agents_config['credibility_verifier'],
-			llm=LLM(model="ollama/llama3.2:3b", base_url='http://localhost:11434'),
-			verbose=True
+			llm=LLM(model="ollama/llama3.1:8b", base_url='http://localhost:11434')
 		)
 
 	@agent
 	def objective_selector(self) -> Agent:
 		return Agent(
 			config=self.agents_config['objective_selector'],
-			llm=LLM(model="ollama/llama3.2:3b", base_url='http://localhost:11434'),
-			verbose=True
+			llm=LLM(model="ollama/llama3.1:8b", base_url='http://localhost:11434')
 		)
 
 	@task
 	def analyze_text_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['analyze_text_task'],
-			verbose=True
 		)
 
 	@task
 	def verify_credibility_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['verify_credibility_task'],
-			context=[self.analyze_text_task()],
-			verbose=True
+			context=[self.analyze_text_task()]
 		)
 
 	@task
 	def select_objective_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['select_objective_task'],
-			context=[self.verify_credibility_task()],
-			verbose=True
+			context=[self.verify_credibility_task()]
 		)
 
 	@crew
