@@ -1,0 +1,108 @@
+analyze_text_task:
+  description: >
+    Analyze the provided tweet text and extract the main points being communicated. Present these main points as a numbered list, ensuring that each point is clear and concise.
+
+    **Instructions**:
+
+    1. **Read** the tweet text carefully to fully understand its content.
+    2. **Identify** all the key messages, statements, or claims made in the tweet.
+    3. **Summarize** each main point in your own words for clarity.
+    4. **List** each main point as a separate item in a numbered list.
+    5. **Ensure** that each point is clear, concise, and free of unnecessary details.
+
+    **Your goal** is to provide an organized and easy-to-read list of the main points from the tweet to facilitate further analysis.
+    The tweet text is: {topic}.
+
+  expected_output: >
+    1. Main point one.
+    2. Main point two.
+    3. Main point three.
+
+  agent: text_analyzer
+
+
+verify_credibility_task:
+  description: >
+    From the main points extracted in the previous task, identify which points contain factual claims that should be verified for credibility. For each such point, provide a brief description and generate specific verification questions that would help assess the accuracy and reliability of the claim.
+
+    **Instructions**:
+
+    1. **Review** each main point from the input.
+    2. **Determine** whether the point contains a factual claim that can be objectively verified.
+       - Focus on statements that involve data, events, actions, or decisions that can be checked against reliable sources.
+    3. **Include** the point if it contains a factual claim requiring verification.
+    4. **For each included point**:
+       - **Provide** a brief description summarizing the factual claim.
+       - **Generate** specific verification questions or details that need to be checked to assess the credibility of the claim.
+    5. **Output** the results in a structured JSON format as specified below.
+
+    **Your goal** is to identify all main points involving factual claims that require credibility verification and structure them appropriately for further analysis.
+
+    **Note**: Focus on points that can be objectively verified for accuracy and credibility. Exclude points that are purely subjective or opinion-based unless they involve a verifiable claim.
+
+  input_from: analyze_text_task
+  expected_output: >
+    {{
+      "Topic_name_One": {{
+        "description": "Brief description of the factual claim.",
+        "verification_points": [
+          "Specific question or detail to verify."
+        ]
+      }},
+      "Topic_name_Two": {{
+        "description": "Brief description of the factual claim.",
+        "verification_points": [
+          "Specific question or detail to verify."
+        ]
+      }}
+    }}
+  agent: credibility_verifier
+
+
+select_objective_task:
+  description: >
+    Review each item in the provided JSON data from the previous task. For each item, determine whether it is an **objective fact** or a **subjective opinion** based on the following definitions:
+
+    - **Objective Fact**: A statement that can be proven true or false with empirical evidence, data, or official records.
+    - **Subjective Opinion**: A statement based on personal beliefs, feelings, interpretations, or perceptions that cannot be objectively verified.
+
+    **Instructions**:
+
+    1. **Analyze each topic**:
+       - Look for language indicating perception or opinion (e.g., "is perceived as," "many believe," "is considered").
+       - Assess whether the statement can be verified with factual data or official records.
+    2. **Decide**:
+       - **Include** the topic if it is an **objective fact**.
+       - **Exclude** the topic if it is a **subjective opinion**.
+    3. **Justify** (internally) your decision for each topic based on the criteria.
+    4. **Output**:
+       - Provide a JSON object containing **only** the topics that are objective facts.
+
+    **Examples**:
+
+    - **Include**:
+      - "The city council approved a new budget of $2 million for public parks."
+      - "The company reported a 10% increase in quarterly profits."
+    - **Exclude**:
+      - "Many residents feel that the city council is wasting money."
+      - "The new policy is considered a step backward by some experts."
+
+    **Your goal** is to ensure that all significant factual claims, especially those involving critical issues or high-impact statements, are included for verification, while subjective opinions are excluded.
+
+  input_from: verify_credibility_task
+  expected_output: >
+    {{
+      "Topic_name_One": {{
+        "description": "An objective fact that requires verification.",
+        "verification_points": [
+          "Specific question or detail to verify."
+        ]
+      }},
+      "Topic_name_Two": {{
+        "description": "Another objective fact suitable for verification.",
+        "verification_points": [
+          "Specific question or detail to verify."
+        ]
+      }}
+    }}
+  agent: objective_selector
