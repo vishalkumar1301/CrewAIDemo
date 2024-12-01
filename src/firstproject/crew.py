@@ -1,11 +1,6 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
-
-# Uncomment the following line to use an example of a custom tool
-# from firstproject.tools.custom_tool import MyCustomTool
-
-# Check our tools documentations for more information on how to use them
-# from crewai_tools import SerperDevTool
+from .models import AnalyzeTextOutput, VerifyCredibilityOutput, SelectObjectiveOutput
 
 @CrewBase
 class Firstproject():
@@ -18,21 +13,21 @@ class Firstproject():
 	def text_analyzer(self) -> Agent:
 		return Agent(
 			config=self.agents_config['text_analyzer'],
-			llm=LLM(model="ollama/llama3.1:8b", base_url='http://localhost:11434')
+			llm=LLM(model="ollama/llama3.2:1b", base_url='http://localhost:11434')
 		)
 
 	@agent
 	def credibility_verifier(self) -> Agent:
 		return Agent(
 			config=self.agents_config['credibility_verifier'],
-			llm=LLM(model="ollama/llama3.1:8b", base_url='http://localhost:11434')
+			llm=LLM(model="ollama/llama3.2:1b", base_url='http://localhost:11434')
 		)
 
 	@agent
 	def objective_selector(self) -> Agent:
 		return Agent(
 			config=self.agents_config['objective_selector'],
-			llm=LLM(model="ollama/llama3.1:8b", base_url='http://localhost:11434')
+			llm=LLM(model="ollama/llama3.2:1b", base_url='http://localhost:11434')
 		)
 
 	@task
@@ -45,14 +40,14 @@ class Firstproject():
 	def verify_credibility_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['verify_credibility_task'],
-			context=[self.analyze_text_task()]
+			context=[self.analyze_text_task()],
 		)
 
 	@task
 	def select_objective_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['select_objective_task'],
-			context=[self.verify_credibility_task()]
+			context=[self.verify_credibility_task()],
 		)
 
 	@crew
